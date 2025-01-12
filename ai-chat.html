@@ -1,6 +1,13 @@
+<!-- このHTMLプログラム[1]は、簡単なチャットアプリケーションの前端（フロントエンド）部分を構築するものです。
+ユーザーは入力フィールドにメッセージを入力し、ボタンを押すことで、サーバー（バックエンド）にリクエストを送信し、応答を受け取ります。 -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+        <!-- メタタグやスタイル定義を含みます。
+        meta charset="UTF-8" は文字エンコーディングを指定しています。
+        meta name="viewport" はレスポンシブデザインをサポートするための設定です。
+        内部スタイルシートで、チャットボックスや入力フィールドのスタイルを定義しています。 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
@@ -19,22 +26,50 @@
     </style>
 </head>
 <body>
+    <!-- ユーザーインターフェース（UI）の要素を配置しています。
+    見出し、チャットボックス、入力フィールド、送信ボタンの順に配置されます。
+    送信ボタンにJavaScriptの sendMessage 関数が紐づけられています。 -->
+
     <h1>Chat with Azure OpenAI</h1>
     <div id="chatbox"></div>
+
+    <!-- HTML内の id タグを'user-input' の要素になると定義（ユーザプロンプトの入力部分であるInputBoxがtextデータの場合） -->
     <input type="text" id="user-input" placeholder="Type a message..." />
     <button onclick="sendMessage()">Send</button>
 
+    <!-- JavaScriptの処理 -->
+    <!-- ボディセクション内で定義されているJavaScriptは、ユーザーの入力を処理してサーバーに送信し、応答を表示するものです -->
     <script>
+        // sendMessage 関数の定義:
+            // async キーワードは、この関数が非同期関数であることを示しています。
+            // 非同期関数は、await キーワードを使うことで、非同期処理が完了するまで待機することができます。
         async function sendMessage() {
+            
+            // document.getElementById('user-input') を使って、HTML内の id タグが 'user-input' の要素を取得します。
+            // value プロパティを使用して、その入力フィールドに入力されたテキストを userInput 変数に保持します
             const userInput = document.getElementById('user-input').value;
-            const response = await fetch('/api/FunctionName', {
+
+        // サーバーへのリクエスト:
+            // fetch 関数を使って非同期リクエストを送信します。
+            // await キーワードで、response 変数がサーバーからのレスポンスを受け取るのを待機します。
+            // リクエストオプションとして、HTTPメソッドは 'POST'、ヘッダーには 'Content-Type': 'application/json' を指定しています。
+            // body プロパティには、userInput を JSON.stringify でJSON形式に変換して渡しています。
+            const response = await fetch('https://gentle-beach-03a770100.4.azurestaticapps.net', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user_input: userInput })
             });
+
+        // 応答の解析:
+            // サーバーからのレスポンスをJSON形式で解析し、その結果を data 変数に代入します。
             const data = await response.json();
+
+        // チャットボックスへの表示:
+            // document.getElementById('chatbox') で、チャットボックス要素を取得します。
+            // innerHTML プロパティを使って、既存のコンテンツにユーザーからの入力メッセージとサーバーからの応答メッセージを追加します。
+            // ${userInput} と ${data.response} で、それぞれユーザーの入力とサーバーの応答を挿入します。
             const chatbox = document.getElementById('chatbox');
             chatbox.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
             chatbox.innerHTML += `<div><strong>Bot:</strong> ${data.response}</div>`;
