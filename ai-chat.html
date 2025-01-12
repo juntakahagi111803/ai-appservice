@@ -1,5 +1,11 @@
-<!-- このHTMLプログラム[1]は、簡単なチャットアプリケーションの前端（フロントエンド）部分を構築するものです。
-ユーザーは入力フィールドにメッセージを入力し、ボタンを押すことで、サーバー（バックエンド）にリクエストを送信し、応答を受け取ります。 -->
+<!-- <要約>
+・このHTMLプログラム[1]は、簡単なチャットアプリケーションの前端（フロントエンド）部分を構築するものです。
+・ユーザーは入力フィールドにメッセージを入力し、ボタンを押すことで、サーバー（バックエンド）にリクエストを送信し、応答を受け取ります。
+・このJavaScript関数は、次の手順でユーザーとの対話を実現します：
+    ・ユーザーがテキストを入力し、「Send」ボタンをクリック。
+    ・sendMessage 関数が呼び出され、ユーザーの入力を取得してサーバーに送信。
+    ・サーバーからの応答を取得し、チャットボックスに表示。
+    ・入力フィールドをリセットして次のメッセージ入力を準備。 -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -54,11 +60,31 @@
             // await キーワードで、response 変数がサーバーからのレスポンスを受け取るのを待機します。
             // リクエストオプションとして、HTTPメソッドは 'POST'、ヘッダーには 'Content-Type': 'application/json' を指定しています。
             // body プロパティには、userInput を JSON.stringify でJSON形式に変換して渡しています。
-            const response = await fetch('https://gentle-beach-03a770100.4.azurestaticapps.net', {
+
+            // fetch関数は、JavaScriptでHTTPリクエストを行うための標準的な方法です。
+            // 非同期の関数として動作し、リクエストが完了するまで待機することができます。
+            
+            // URL部分 YOUR_AZURE_FUNCTION_URL に置き換えたい場合、実際のAzure FunctionsのエンドポイントURLを書きます。
+            // このURLは、デプロイしたAzure FunctionのHTTPトリガーのエンドポイントです。
+            // 例えば、Azure Functionsのエンドポイントが https://myfunctionapp.azurewebsites.net/api/GenerateResponse だとしたら、
+            // 次のように書き換えます
+            // 
+            // const response = await fetch('https://myfunctionapp.azurewebsites.net/api/GenerateResponse', { 
+            //     method: 'POST', 
+            //         headers: { 'Content-Type': 'application/json' }, 
+            //         body: JSON.stringify({ user_input: userInput }
+            //     )
+            // 
+            const response = await fetch('https://ai-taka-tokyo.azurewebsites.net/api/http_trigger1?', {
+                // HTTPメソッド:POST メソッドを使用してデータを送信します。サーバー側でデータを処理して応答を生成します。
                 method: 'POST',
+
+                // ヘッダーの設定:ヘッダーで Content-Type を application/json に設定しています。これにより、サーバーは受け取るデータがJSON形式であることを認識します。
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                // リクエストボディ:body プロパティには、JavaScriptオブジェクトをJSON形式に変換したものを渡しています。
+                // 具体的には、ユーザーの入力 userInput を user_input キーにマッピングしてJSONオブジェクトとして送信します
                 body: JSON.stringify({ user_input: userInput })
             });
 
