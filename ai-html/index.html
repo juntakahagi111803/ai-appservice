@@ -16,6 +16,10 @@
         内部スタイルシートで、チャットボックスや入力フィールドのスタイルを定義しています。 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Azure Static Web Appでは、環境変数を使う際は、HTML内の meta タグを介して値を取得する方法を使います。Azure Static Web Apps の環境変数を直接 JavaScript で使用する方法は標準では存在しないためです。 -->
+    <meta name="azure-function-url" content="%AZURE_FUNCTION_URL%">
+
     <title>Chat App</title>
     <style>
         #chatbox {
@@ -75,8 +79,11 @@
             //         headers: { 'Content-Type': 'application/json' }, 
             //         body: JSON.stringify({ user_input: userInput }
             //     )
-            // 
-            const response = await fetch('https://ai-testfunct.azurewebsites.net/api/get_response', {
+            
+            // htmlのmeta で定義した環境変数を取得。
+            // Azure Static Web Apps はビルド時に、WebApp上で設定した環境変数を埋め込むので、metaタグ内でこの変数を使います
+            const azureFunctionUrl = document.querySelector('meta[name="azure-function-url"]').content;
+            const response = await fetch(azureFunctionUrl, {
                 // HTTPメソッド:POST メソッドを使用してデータを送信します。サーバー側でデータを処理して応答を生成します。
                 method: 'POST',
                 // ヘッダーの設定:ヘッダーで Content-Type を application/json に設定しています。これにより、サーバーは受け取るデータがJSON形式であることを認識します。
