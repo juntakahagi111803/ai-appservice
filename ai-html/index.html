@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="azure-function-url" content="%AZURE_FUNCTION_URL%">
+    <!-- <meta name="azure-function-url" content="%AZURE_FUNCTION_URL%"> -->
     <title>Chat App</title>
     <style>
         #chatbox {
@@ -28,8 +28,8 @@
         async function sendMessage() {
             const userInput = document.getElementById('user-input').value;
             
-            const azureFunctionUrl = document.querySelector('meta[name="azure-function-url"]').content;
-            const response = await fetch(azureFunctionUrl, {
+            // const azureFunctionUrl = document.querySelector('meta[name="azure-function-url"]').content;
+            const response = await fetch('https://ai-testfunct.azurewebsites.net/api/get_response', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
